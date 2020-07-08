@@ -1,18 +1,10 @@
 import React from "react";
 
-const Postsnfo = [
-  { id: "1", title: "Claudia", body: "Se agrega una nueva amiga" },
-  { id: "2", title: "Laura", body: "Se escribe" },
-  { id: "3", title: "Monica", body: "Lo dejo de seguir" },
-  { id: "4", title: "Pablo", body: "felicita por su nuevo trabajo" },
-
-
 
 class Posts extends React.Component {
   state = {
-    user: "",
     posts: [],
-    isLoading: false
+    fetched: false
   };
 
   componentDidMount() {
@@ -27,30 +19,33 @@ class Posts extends React.Component {
   }
 
   getPostByUser() {
-    // esta función debe:
-    // 1. obtener el id proveniente del objeto match
-    // 2. realizar el fetch con los posts
-    // 3. setear en el estado los posts
-    // 4. cambiar el valor de la variable isLoading
 
-    const id = this.props.match.params.id;
-    const { descripcion } = posts.find(red => user.id === id);
-    this.setState({ body });
+    fetch("https://jsonplaceholder.typicode.com/posts")
+      .then(response => response.json())
+      .then(postList => {
+        // si se implementa solo los primeros 5 usuarios
+        const posts = postList.slice(0, 5);
+    this.setState({ posts, fetched: true });
   }
 
+
   render() {
-    return (
-      <>
-        {/**
-          Debemos implementar un mecanismo para limpiar los posts mostrados
-        */}
-        {!this.state.isLoading && (
+  return (
+      <React.Fragment>
+       {this.state.isLoading && (
           <div className="post-container">
-            Aquí van los posts. Una vez en el estado, deberemos iterar sobre
-            ellos.
+            {this.state.fetched &&
+            this.state.posts.map(red => {
+              return (
+                <Link key={red.id} to={`/redes/${red.id}`}>
+                  <div className="user user-name">{red.nombre}</div>
+                </Link>
+              );
+            })}
           </div>
         )}
-      </>
+        <Route path="/redes/:id" component={RedInfo} />
+      </React.Fragment>
     );
   }
 }

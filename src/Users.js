@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link, Route } from "react-router-dom";
-import Posts from "./Posts";
+import Post from "./Posts";
 
 export default class Users extends Component {
   state = {
@@ -54,7 +54,7 @@ export default class Users extends Component {
               );
             })}
         </div>
-        {/* debo Agregar la ruta del usuario*/}
+        <Route path="/users/:id" component={post} />
       </React.Fragment>
     );
   }
